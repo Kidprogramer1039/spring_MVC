@@ -2,6 +2,7 @@ package hello.servlet.basic.response;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,7 +24,7 @@ public class ResponseHeaderServlet extends HttpServlet {
         response.setHeader("my-header", "hello");
 
         content(response);
-
+        cookie(response);
         PrintWriter writer = response.getWriter();
         writer.println("ok");
 
@@ -38,5 +39,19 @@ public class ResponseHeaderServlet extends HttpServlet {
         //response.setContentLength(2); //(생략시 자동 생성)
     }
 
+    private void cookie(HttpServletResponse response) {
+        //Set-Cookie: myCookie=good; Max-Age=600;
+        //response.setHeader("Set-Cookie", "myCookie=good; Max-Age=600");
+        Cookie cookie = new Cookie("myCookie", "good");
+        cookie.setMaxAge(600); //600초
+        response.addCookie(cookie);
+    }
 
+    private void redirect(HttpServletResponse response) throws IOException {
+        //Status Code 302
+        //Location: /basic/hello-form.html
+        //response.setStatus(HttpServletResponse.SC_FOUND); //302
+        //response.setHeader("Location", "/basic/hello-form.html");
+        response.sendRedirect("/basic/hello-form.html");
+    }
 }
